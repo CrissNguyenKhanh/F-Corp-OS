@@ -5,9 +5,10 @@ import { UsersController } from './users.controller';
 import { User } from './entities/user.entity';
 
 @Module({
-  // Import dòng này để liên kết Entity với TypeORM
-  imports: [TypeOrmModule.forFeature([User])], 
+  imports: [TypeOrmModule.forFeature([User])],
   controllers: [UsersController],
   providers: [UsersService],
+  // BẮT BUỘC: Thêm dòng này để chia sẻ hàm tìm User cho AuthModule dùng ké
+  exports: [UsersService], 
 })
 export class UsersModule {}

@@ -14,24 +14,26 @@ export class UsersService {
     private usersRepository: Repository<User>,
   ) {}
 
-  async create(createUserDto: CreateUserDto) {
-    // 1. Băm mật khẩu (Mã hóa)
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(createUserDto.password, salt);
+   async create(createUserDto: CreateUserDto) {
+      // 1. Băm mật khẩu (Mã hóa)
+      const salt = await bcrypt.genSalt(10);
+      const hashedPassword = await bcrypt.hash(createUserDto.password, salt);
 
-    // 2. Chuẩn bị giỏ hàng chứa dữ liệu mới
-    const newUser = this.usersRepository.create({
-      ...createUserDto,
-      password: hashedPassword,
-    });
+      // 2. Chuẩn bị giỏ hàng chứa dữ liệu mới
+      const newUser = this.usersRepository.create({
+        ...createUserDto,
+        password: hashedPassword,
+      });
 
-    // 3. Lưu xuống Database và trả về kết quả
-    const savedUser = await this.usersRepository.save(newUser);
-    
-    // Xóa mật khẩu khỏi cục dữ liệu trả về cho Frontend (Bảo mật)
-    delete savedUser.password;
-    return savedUser;
-  }
+      // 3. Lưu xuống Database
+      const savedUser = await this.usersRepository.save(newUser);
+      
+      // 4. FIX LỖI Ở ĐÂY: Tách riêng password ra, gom toàn bộ data còn lại vào biến 'result'
+      const { password, ...result } = savedUser;
+      
+      // Trả về result (đã không còn chứa password)
+      return result;
+    }
 
   // Các hàm mặc định dưới đây chúng ta sẽ code sau
   findAll() { return `This action returns all users`; }
