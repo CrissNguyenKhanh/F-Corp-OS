@@ -3,6 +3,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { AppService } from './app.service';
         synchronize: true, // Tự động tạo bảng từ code (CHỈ DÙNG KHI DEV, cấm dùng ở Production)
       }),
     }),
+    UsersModule,
   ],
   controllers: [AppController],
   providers: [AppService],
