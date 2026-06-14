@@ -1,7 +1,8 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { AuthGuard } from '../auth/auth.guard'; // 1. Import Lính gác
 
 @Controller('users')
 export class UsersController {
@@ -12,10 +13,13 @@ export class UsersController {
     return this.usersService.create(createUserDto);
   }
 
+  // 2. Bố trí lính gác ngay trên đầu API GET
+  @UseGuards(AuthGuard) 
   @Get()
   findAll() {
     return this.usersService.findAll();
   }
+
 
   @Get(':id')
   findOne(@Param('id') id: string) {

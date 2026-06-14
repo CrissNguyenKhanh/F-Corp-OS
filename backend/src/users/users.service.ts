@@ -34,7 +34,14 @@ export class UsersService {
       // Trả về result (đã không còn chứa password)
       return result;
     }
-
+    
+// Thêm hàm này để AuthService có thể gọi sang và tìm User
+  // Sửa lại hàm findByEmail này
+  async findByEmail(email: string): Promise<User | undefined> {
+    const user = await this.usersRepository.findOne({ where: { email } });
+    // Nếu user là null thì trả về undefined, nếu không thì trả về user
+    return user ?? undefined; 
+  }
   // Các hàm mặc định dưới đây chúng ta sẽ code sau
   findAll() { return `This action returns all users`; }
   findOne(id: number) { return `This action returns a #${id} user`; }

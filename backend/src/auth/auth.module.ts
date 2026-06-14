@@ -10,6 +10,7 @@ import { UsersModule } from '../users/users.module'; // Import UsersModule
     UsersModule, // Gắn kết với module Nhân sự
     // Cấu hình máy in Token JWT
     JwtModule.registerAsync({
+      global: true,
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: async (configService: ConfigService) => ({
