@@ -4,7 +4,7 @@ import { Repository } from 'typeorm';
 import { CreateAllocationDto } from './dto/create-allocation.dto';
 import { UpdateAllocationDto } from './dto/update-allocation.dto';
 import { Allocation } from './entities/allocation.entity';
-
+// test để merge1
 @Injectable()
 export class AllocationsService {
   constructor(
