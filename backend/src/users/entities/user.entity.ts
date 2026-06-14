@@ -1,4 +1,6 @@
-import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, OneToMany } from 'typeorm';
+import { Allocation } from '../../allocations/entities/allocation.entity';
+
 
 @Entity('users') // Tên bảng trong Database
 export class User {
@@ -27,4 +29,8 @@ export class User {
 
   @UpdateDateColumn()
   updatedAt: Date;
+
+  // Mối quan hệ 1-N với bảng Allocation
+  @OneToMany(() => Allocation, (allocation) => allocation.user)
+  allocations: Allocation[];
 }

@@ -1,5 +1,5 @@
-import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn } from 'typeorm';
-
+import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, OneToMany } from 'typeorm';
+import { Allocation } from '../../allocations/entities/allocation.entity';
 @Entity('projects') // Tên bảng trong Database MySQL
 export class Project {
   @PrimaryGeneratedColumn('uuid')
@@ -26,4 +26,7 @@ export class Project {
 
   @UpdateDateColumn()
   updatedAt: Date;
+
+  @OneToMany(() => Allocation, (allocation) => allocation.project)
+  allocations: Allocation[];
 }
