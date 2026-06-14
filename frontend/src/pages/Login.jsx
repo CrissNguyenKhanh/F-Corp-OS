@@ -1,15 +1,38 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Form, Input, Button, Card, Typography, message } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 const { Title } = Typography;
 
-// Đã bỏ ": React.FC"
 const Login = () => {
-  // Đã bỏ ": any"
-  const onFinish = (values) => {
-    console.log('Dữ liệu nhập vào:', values);
-    message.info('Chuẩn bị gọi API Backend ở bước sau nhé!');
+  const [loading, setLoading] = useState(false); // Hiệu ứng loading nút bấm
+  const navigate = useNavigate(); // Công cụ chuyển trang
+
+  const onFinish = async (values) => {
+    setLoading(true);
+    try {
+      // 1. Mang Email & Password bắn xuống Backend
+      const response = await axios.post('http://localhost:3000/auth/login', values);
+      
+      // 2. Nếu thành công, bóc tách dữ liệu Token và User
+      const { access_token, user } = response.data;
+      
+      // 3. Cất Token vào "Két sắt" của trình duyệt (localStorage)
+      localStorage.setItem('access_token', access_token);
+      localStorage.setItem('user_info', JSON.stringify(user));
+      
+      message.success(`Chào mừng ${user.fullName} trở lại!`);
+      
+      // 4. Chuyển hướng sang trang Dashboard
+      navigate('/dashboard');
+    } catch (error) {
+      // Bắt lỗi nếu sai pass hoặc email
+      message.error(error.response?.data?.message || 'Lỗi kết nối đến Server!');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -36,7 +59,7 @@ const Login = () => {
           </Form.Item>
 
           <Form.Item>
-            <Button type="primary" htmlType="submit" size="large" block>
+            <Button type="primary" htmlType="submit" size="large" block loading={loading}>
               Đăng nhập
             </Button>
           </Form.Item>

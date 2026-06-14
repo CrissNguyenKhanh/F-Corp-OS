@@ -1,13 +1,14 @@
-import { ValidationPipe } from '@nestjs/common'; // Thêm dòng này
+import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   
-  // Bật tính năng kiểm tra dữ liệu đầu vào (ValidationPipe)
-  app.useGlobalPipes(new ValidationPipe()); 
+  // 🟢 THÊM DÒNG NÀY: Cho phép Frontend gọi API chéo cổng
+  app.enableCors(); 
 
+  app.useGlobalPipes(new ValidationPipe()); 
   await app.listen(process.env.PORT ?? 3000);
 }
 bootstrap();
